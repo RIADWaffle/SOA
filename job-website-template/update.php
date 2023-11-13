@@ -131,7 +131,7 @@
                 var id = <?php echo $id; ?>;
                 
                 var diferencias = 0;
-                var campoCambiado = null;
+                var data = new URLSearchParams();
 
                 for (var campo in variablesPHP) {
                     var valorPHP = variablesPHP[campo];
@@ -141,14 +141,15 @@
 
                     if (valorPHP !== valorInput) {
                         diferencias++;
-                        campoCambiado = campo;
-                        value = valorInput;
+                        data.append(campo, valorInput);
                     }
                 }
+                console.log('Diferencias', diferencias);
 
-                if (diferencias === 1) {
-                    fetch('method.php?id='+ id + '&change=' + campoCambiado + '&value=' + value, {
+                if (diferencias <= 4) {
+                    fetch('method.php?id='+ id, {
                         method: 'PATCH',
+                        body: data
                     })
                     .then(function(response) {
                         return response.text();

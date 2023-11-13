@@ -73,11 +73,42 @@ switch($_SERVER['REQUEST_METHOD']) {
 /////////////////// PATCH REQUEST /////////////////////////
       case 'PATCH':
         if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
+          parse_str(file_get_contents("php://input"), $datos);
+
+          // INICIAR VARIABLES
+          $id = $_GET['id'];    
+          $img = isset($datos['img']) ? $datos['img'] : null;
+          $name = isset($datos['name']) ? $datos['name'] : null;
+          $salary = isset($datos['salary']) ? $datos['salary'] : null;
+          $type = isset($datos['type']) ? $datos['type'] : null;
+          $place = isset($datos['place']) ? $datos['place'] : null;
+
+          // REVIZAR CAMBIOS
+          if ($_SERVER['REQUEST_METHOD'] === 'PATCH') { // Método PATCH
+            $actualizaciones = array();
+
+            if (!empty($img)) {
+                $actualizaciones[] = "img = '$img'";
+            }
+            if (!empty($name)) {
+                $actualizaciones[] = "name = '$name'";
+            }
+            if (!empty($salary)) {
+                $actualizaciones[] = "salary = '$salary'";
+            }
+            if (!empty($type)) {
+                $actualizaciones[] = "type = '$type'";
+            }
+            if (!empty($place)) {
+                $actualizaciones[] = "place = '$place'";
+            }
+    
+            $actualizaciones_str = implode(', ', $actualizaciones);
+            $sql = "UPDATE jobs SET $actualizaciones_str WHERE id = $id";
+        }
+
+
           // Procesar solicitud PATCH
-          $id = $_GET['id'];
-          $change = $_GET['change'];
-          $value = $_GET['value'];
-          $sql = "UPDATE jobs SET $change='$value' WHERE id = $id";
       
           if ($conexion->query($sql) === TRUE) {
               echo "Registro actualizado con éxito. (PATCH)";

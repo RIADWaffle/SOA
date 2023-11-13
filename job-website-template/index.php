@@ -1,3 +1,17 @@
+<?php
+session_start();
+
+// Verifica si la variable de sesión está iniciada
+if (!isset($_SESSION['login'])) {
+    // Si no está iniciada, redirige a otra página
+    header("Location: /login/");
+    exit(); // Asegura que el script se detenga después de la redirección
+}
+
+// Resto de tu código aquí si la variable de sesión está iniciada
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
